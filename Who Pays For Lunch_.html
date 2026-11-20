@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Who Pays For Lunch?</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2F6EE;--card:#FFFFFF;--ink:#1D2A1E;--mute:#66736A;--line:#DDE5D8;--accent:#E8473A;--accent-ink:#fff;--mustard:#FFC93C;--leaf:#2F8F5B;--leaf-bg:#DDF1E4;--warn-bg:#FFF0C2;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121A14;--card:#1B261D;--ink:#EEF4EA;--mute:#9AAA9F;--line:#2B3A2E;--accent:#FF6A5C;--accent-ink:#1a0b09;--leaf:#5FCB8A;--leaf-bg:#1F3A29;--warn-bg:#4A3E12;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121A14;--card:#1B261D;--ink:#EEF4EA;--mute:#9AAA9F;--line:#2B3A2E;--accent:#FF6A5C;--accent-ink:#1a0b09;--leaf:#5FCB8A;--leaf-bg:#1F3A29;--warn-bg:#4A3E12;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.35}
+#app{max-width:560px;margin:0 auto;padding:20px 16px 110px}
+h1{font-size:34px;line-height:1.02;margin:6px 0 4px;font-weight:800;letter-spacing:-.02em}
+h2{font-size:24px;margin:0 0 12px;font-weight:800}
+.sub{color:var(--mute);margin:0 0 18px}
+.btn{display:block;width:100%;border:0;border-radius:18px;padding:18px;font:700 19px inherit;font-family:inherit;background:var(--accent);color:var(--accent-ink);cursor:pointer;min-height:58px;transition:transform .08s}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.alt{background:var(--card);color:var(--ink);border:2px solid var(--line)}
+.btn.leaf{background:var(--leaf);color:#fff}
+.btn.big{font-size:24px;padding:24px;border-radius:24px}
+.btn.ghost{background:none;color:var(--mute);min-height:44px;padding:10px}
+.stack>*+*{margin-top:12px}
+.hero{background:var(--mustard);color:#2a2000;border-radius:28px;padding:26px 22px;margin-bottom:18px;position:relative;overflow:hidden}
+.hero .em{font-size:64px;position:absolute;right:14px;top:10px;transform:rotate(12deg)}
+.hero h1{max-width:75%}
+.hero p{margin:0 0 18px;max-width:75%;font-weight:500}
+.hero .btn{background:#2a2000;color:#FFC93C}
+.row{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px 14px;margin-bottom:10px;cursor:pointer;min-height:64px;user-select:none}
+.row.on{border-color:var(--leaf);background:var(--leaf-bg)}
+.av{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:800;font-size:17px}
+.av.sm{width:28px;height:28px;font-size:12px}
+.nm{font-weight:700;flex:1;min-width:0}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--warn-bg);color:var(--ink);margin-left:6px;white-space:nowrap}
+.chk{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:16px;color:#fff;flex:none}
+.on .chk{background:var(--leaf);border-color:var(--leaf)}
+.gbtn{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;padding:8px 14px;font:700 14px inherit;font-family:inherit;cursor:pointer;min-height:40px}
+.gbtn.on{background:var(--mustard);border-color:var(--mustard);color:#2a2000}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 16px;margin:6px 0 16px;cursor:pointer}
+.sw small{display:block;color:var(--mute);font-size:14px}
+.tg{width:54px;height:32px;border-radius:99px;background:var(--line);position:relative;flex:none;transition:background .15s}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;transition:transform .15s}
+.tg.on{background:var(--leaf)}.tg.on::after{transform:translateX(22px)}
+.card{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:16px;margin-bottom:12px}
+.card .top{display:flex;justify-content:space-between;gap:8px;font-weight:700}
+.faces{display:flex;gap:4px;flex-wrap:wrap;margin:10px 0}
+.paid{color:var(--leaf);font-weight:700}
+.mute{color:var(--mute)}
+.stat{display:flex;align-items:center;gap:12px}
+.score{font-size:30px;font-weight:800;letter-spacing:-.02em;text-align:right}
+.score small{display:block;font-size:12px;font-weight:500;color:var(--mute);letter-spacing:0}
+.nums{display:flex;gap:14px;color:var(--mute);font-size:14px;margin-top:4px;flex-wrap:wrap}
+.nums b{color:var(--ink)}
+.next{outline:3px solid var(--mustard)}
+.empty{text-align:center;padding:40px 16px;color:var(--mute)}
+.empty .em{font-size:52px;display:block}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:2px solid var(--line);display:flex;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}
+nav button{flex:1;background:none;border:0;font:600 12px inherit;font-family:inherit;color:var(--mute);padding:8px 2px;border-radius:14px;cursor:pointer;min-height:56px}
+nav button span{display:block;font-size:24px}
+nav button.on{color:var(--ink);background:var(--warn-bg)}
+.reveal{text-align:center;padding:26px 8px}
+.reveal .lab{color:var(--mute);margin-bottom:12px}
+.reveal .big{font-size:56px;font-weight:800;letter-spacing:-.03em;line-height:1.05;min-height:64px}
+.reveal .big.done{animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+.reveal .av{width:96px;height:96px;font-size:40px;margin:0 auto 14px}
+@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg)}}
+.conf{position:fixed;top:-40px;font-size:28px;pointer-events:none;animation:fall 2.4s ease-in forwards;z-index:9}
+.wh{position:relative;width:min(86vw,340px);margin:14px auto 0}
+.wh svg{width:100%;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.22));transition:transform 4.8s cubic-bezier(.12,.7,.1,1)}
+.ptr{position:absolute;left:50%;top:-16px;transform:translateX(-50%);font-size:36px;color:var(--ink);z-index:2;line-height:1}
+@media (prefers-reduced-motion:reduce){.reveal .big.done{animation:none}.conf{display:none}.wh svg{transition:none}}
+dialog{border:0;border-radius:24px;padding:24px;background:var(--card);color:var(--ink);max-width:340px;width:calc(100% - 40px)}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+dialog h2{margin-bottom:8px}
+.banner{background:var(--warn-bg);border-radius:14px;padding:10px 14px;margin-bottom:14px;font-size:15px}
+button:focus-visible,.row:focus-visible,.sw:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav id="nav"></nav>
+<dialog id="dlg"><h2>Clear everything?</h2><p class="mute">This deletes all hangouts and resets every stat. It can’t be undone.</p>
+<div class="stack"><button class="btn" data-act="wipe">Yes, clear all history</button><button class="btn alt" data-act="closedlg">Keep my history</button></div></dialog>
+
+<script>
+const P=[["Ben","#E8473A"],["Caleb","#2F8F5B"],["Hudson","#3B6FD8"],["Tyler","#D98A00"],["Sid","#8B4FC9"],["Hunter","#D6407F"],["Kristian","#0F8A98"],["Ethan","#7A5A3A"]];
+const NAMES=P.map(p=>p[0]), COL=Object.fromEntries(P);
+const KEY="whoPaysForLunch.v1";
+let st={real:[],demo:[],sample:false,pending:null};
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s)st=Object.assign(st,s)}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const hist=()=>st.sample?st.demo:st.real;
+let ui={tab:"pick",sel:new Set(),guests:new Set(),gm:false,paidBy:null};
+const rand=a=>a[Math.floor(Math.random()*a.length)];
+const av=(n,c="")=>`<div class="av ${c}" style="background:${COL[n]}">${n[0]}</div>`;
+
+function stats(h){
+  const s={};NAMES.forEach(n=>s[n]={att:0,paid:0,guest:0,lastPaid:-1});
+  h.forEach((x,i)=>{x.att.forEach(n=>{s[n].att++;if(x.guests.includes(n))s[n].guest++});if(x.payer)s[x.payer].paid++,s[x.payer].lastPaid=i});
+  return s;
+}
+function lastPayer(h){for(let i=h.length-1;i>=0;i--)if(h[i].payer)return h[i].payer;return null}
+// Picks the payer. "prior attendance" = hangouts already in history.
+function pick(att,guests,h){
+  const s=stats(h);
+  let pool=att.filter(n=>!guests.includes(n)&&s[n].att>=3);
+  if(!pool.length)pool=att.slice(); // everyone exempt -> someone must pay
+  const last=lastPayer(h);
+  if(pool.length>1&&last&&pool.includes(last))pool=pool.filter(n=>n!==last);
+  const f=n=>s[n].att?s[n].paid/s[n].att:0;
+  if(pool.every(n=>f(n)===0))return rand(pool);
+  const min=Math.min(...pool.map(f));
+  let t=pool.filter(n=>f(n)===min);
+  const old=Math.min(...t.map(n=>s[n].lastPaid));
+  return rand(t.filter(n=>s[n].lastPaid===old));
+}
+function makeDemo(){
+  const h=[],w={Ben:.9,Caleb:.85,Hudson:.8,Tyler:.7,Sid:.6,Hunter:.5,Kristian:.25,Ethan:.15};
+  for(let i=0;i<14;i++){
+    let att=NAMES.filter(n=>Math.random()<w[n]);if(att.length<3)att=NAMES.slice(0,4);
+    const d=new Date();d.setDate(d.getDate()-(14-i)*4);
+    h.push({id:"d"+i,date:d.toISOString(),att,guests:[],payer:pick(att,[],h)});
+  }
+  return h;
+}
+const fmt=iso=>new Date(iso).toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+
+function render(){
+  const tabs=[["pick","🍔","Lunch"],["hist","🧾","History"],["stats","🏆","Stats"],["set","⚙️","Settings"]];
+  document.getElementById("nav").innerHTML=tabs.map(t=>`<button data-act="tab" data-v="${t[0]}" class="${ui.tab===t[0]?"on":""}"><span>${t[1]}</span>${t[2]}</button>`).join("");
+  const el=document.getElementById("app");
+  const b=st.sample?`<div class="banner">🧪 Sample data is on. Your real history is safe and untouched.</div>`:"";
+  el.innerHTML=b+({pick:vPick,hist:vHist,stats:vStats,set:vSet}[ui.tab])();
+  if(ui.tab==="pick"&&st.pending&&!st.pending.revealed)runReveal();
+}
+
+function vPick(){
+  const p=st.pending;
+  if(p)return p.revealed?vResult(p):`<div class="reveal"><div class="lab">And today’s lunch is paid by…</div><div id="wheel"></div></div>`;
+  if(!ui.started)return `<div class="hero"><span class="em">🥪</span><h1>Who Pays For Lunch?</h1><p>Fair picks based on who’s paid less for how often they show up.</p><button class="btn" data-act="start">New Hangout</button></div>
+  <p class="mute">${hist().length} hangout${hist().length===1?"":"s"} saved so far.</p>`;
+  const s=stats(hist());
+  const rows=NAMES.map(n=>{
+    const on=ui.sel.has(n),rare=s[n].att<3,g=ui.guests.has(n);
+    return `<div class="row ${on?"on":""}" role="checkbox" aria-checked="${on}" tabindex="0" data-act="tog" data-v="${n}">
+      ${av(n)}<div class="nm">${n}${rare?`<span class="badge">Guest - Exempt</span>`:g?`<span class="badge">Guest today</span>`:""}</div>
+      ${on&&ui.gm?`<button class="gbtn ${g?"on":""}" data-act="guest" data-v="${n}">Guest</button>`:""}
+      <div class="chk">${on?"✓":""}</div></div>`}).join("");
+  const n=ui.sel.size;
+  return `<h2>Who’s coming?</h2><p class="sub">Tap everyone at lunch today.</p>
+  <div class="sw" data-act="gm" role="switch" aria-checked="${ui.gm}" tabindex="0"><div><b>Guest Mode</b><small>Mark people who are just visiting. They’re exempt today.</small></div><div class="tg ${ui.gm?"on":""}"></div></div>
+  ${rows}
+  <div class="stack" style="margin-top:16px"><button class="btn big" data-act="pickpayer" ${n<2?"disabled":""}>Who Pays? 🎲</button>
+  ${n<2?`<p class="mute" style="text-align:center;margin:0">Pick at least 2 people.</p>`:""}
+  <button class="btn ghost" data-act="cancelsel">Cancel</button></div>`;
+}
+function vResult(p){
+  const sel=ui.paidBy||p.payer;
+  return `<div class="reveal"><div class="lab">Today’s payer</div>${av(p.payer)}<div class="big done">${p.payer} 💸</div></div>
+  <div class="card"><b>After lunch: who actually paid?</b><div style="margin-top:10px">${p.att.map(n=>`<div class="row ${n===sel?"on":""}" data-act="paidby" data-v="${n}" style="min-height:56px">${av(n,"sm")}<div class="nm">${n}</div><div class="chk">${n===sel?"✓":""}</div></div>`).join("")}</div></div>
+  <div class="stack"><button class="btn leaf" data-act="confirm">Confirm ${sel} paid</button>
+  <button class="btn alt" data-act="split">Split / mark as paid</button>
+  <button class="btn ghost" data-act="discard">Discard this hangout</button></div>`;
+}
+function vHist(){
+  const h=hist().slice().reverse();
+  if(!h.length)return `<h2>History</h2><div class="empty"><span class="em">🍽️</span>No hangouts yet. Start one from the Lunch tab.</div>`;
+  return `<h2>History</h2>`+h.map(x=>`<div class="card"><div class="top"><span>${fmt(x.date)}</span><span class="mute">${x.att.length} people</span></div>
+  <div class="faces">${x.att.map(n=>av(n,"sm")).join("")}</div>
+  <div class="mute" style="font-size:14px">${x.att.join(", ")}${x.guests.length?` · guests: ${x.guests.join(", ")}`:""}</div>
+  <div style="margin-top:8px">${x.payer?`<span class="paid">💸 ${x.payer} paid</span>`:`<span class="paid">🤝 Split</span>`}</div></div>`).join("");
+}
+function vStats(){
+  const s=stats(hist());
+  const f=n=>s[n].att?s[n].paid/s[n].att:0;
+  const list=NAMES.slice().sort((a,b)=>f(a)-f(b)||s[b].att-s[a].att||s[a].lastPaid-s[b].lastPaid);
+  return `<h2>Leaderboard</h2><p class="sub">Lowest fairness score owes the most. Fairness = times paid ÷ times attended.</p>`+list.map((n,i)=>`
+  <div class="card stat ${i===0&&hist().length?"next":""}">${av(n)}<div style="flex:1;min-width:0"><div class="nm">${n}${s[n].att<3?`<span class="badge">Guest - Exempt</span>`:""}${i===0&&hist().length&&s[n].att>=3?`<span class="badge">Owes most</span>`:""}</div>
+  <div class="nums"><span>Attended <b>${s[n].att}</b></span><span>Paid <b>${s[n].paid}</b></span><span>Exempt as guest <b>${s[n].guest}</b></span></div></div>
+  <div class="score">${f(n).toFixed(2)}<small>fairness</small></div></div>`).join("");
+}
+function vSet(){
+  return `<h2>Settings</h2>
+  <div class="sw" data-act="sample" role="switch" aria-checked="${st.sample}" tabindex="0"><div><b>Sample data</b><small>Preview the app with fake history. Doesn’t touch your real data.</small></div><div class="tg ${st.sample?"on":""}"></div></div>
+  <button class="btn alt" data-act="theme">Switch light / dark</button>
+  <div style="height:12px"></div>
+  <button class="btn" data-act="askwipe">Clear all history</button>
+  <p class="mute">Everything is saved on this device only.</p>`;
+}
+
+function runReveal(){
+  const p=st.pending,host=document.getElementById("wheel");if(!host)return;
+  const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const n=p.att.length,seg=360/n,R=150;
+  const pt=(a,r)=>[(160+r*Math.sin(a*Math.PI/180)).toFixed(1),(160-r*Math.cos(a*Math.PI/180)).toFixed(1)];
+  const slices=p.att.map((nm,i)=>{
+    const a0=i*seg,mid=a0+seg/2,[x0,y0]=pt(a0,R),[x1,y1]=pt(a0+seg,R),[tx,ty]=pt(mid,R*.6);
+    return `<path d="M160 160L${x0} ${y0}A${R} ${R} 0 ${seg>180?1:0} 1 ${x1} ${y1}Z" fill="${COL[nm]}" stroke="#fff" stroke-width="3"/><text x="${tx}" y="${ty}" fill="#fff" font-size="${n>6?16:20}" font-weight="800" text-anchor="middle" dominant-baseline="middle" transform="rotate(${mid-90} ${tx} ${ty})">${nm}</text>`;
+  }).join("");
+  host.innerHTML=`<div class="wh"><div class="ptr">▼</div><svg id="ws" viewBox="0 0 320 320" aria-label="Spinning wheel">${slices}<circle cx="160" cy="160" r="20" fill="#fff" stroke="#ddd" stroke-width="3"/></svg></div><div class="lab" style="margin-top:16px;font-weight:700">Spinning… 🎡</div>`;
+  const w=p.att.indexOf(p.payer),jitter=(Math.random()-.5)*seg*.6;
+  const deg=360*6-(w*seg+seg/2)+jitter;
+  const ws=document.getElementById("ws");ws.getBoundingClientRect();
+  ws.style.transform=`rotate(${deg}deg)`;
+  setTimeout(()=>{if(!document.getElementById("ws"))return;p.revealed=true;save();render();if(!reduce)confetti()},reduce?300:5000);
+}
+function confetti(){
+  const e=["🍕","🍔","🌮","🍟","🥗","🍣","🍩","🥪"];
+  for(let i=0;i<26;i++){const c=document.createElement("div");c.className="conf";c.textContent=rand(e);
+    c.style.left=Math.random()*100+"vw";c.style.animationDelay=Math.random()*.8+"s";document.body.appendChild(c);setTimeout(()=>c.remove(),3500)}
+}
+function finish(payer){
+  const p=st.pending;
+  hist().push({id:String(Date.now()),date:new Date().toISOString(),att:p.att,guests:p.guests,payer});
+  st.pending=null;ui.sel=new Set();ui.guests=new Set();ui.gm=false;ui.paidBy=null;ui.started=false;ui.tab="hist";save();render();
+}
+function act(t){
+  const a=t.dataset.act,v=t.dataset.v;
+  if(a==="tab"){ui.tab=v}
+  else if(a==="start"){ui.started=true}
+  else if(a==="tog"){ui.sel.has(v)?(ui.sel.delete(v),ui.guests.delete(v)):ui.sel.add(v)}
+  else if(a==="guest"){ui.guests.has(v)?ui.guests.delete(v):ui.guests.add(v)}
+  else if(a==="gm"){ui.gm=!ui.gm;if(!ui.gm)ui.guests=new Set()}
+  else if(a==="cancelsel"){ui.started=false;ui.sel=new Set();ui.guests=new Set();ui.gm=false}
+  else if(a==="pickpayer"){
+    const att=NAMES.filter(n=>ui.sel.has(n)),guests=att.filter(n=>ui.guests.has(n));
+    st.pending={att,guests,payer:pick(att,guests,hist()),revealed:false};ui.paidBy=null;save();
+  }
+  else if(a==="paidby"){ui.paidBy=v}
+  else if(a==="confirm"){return finish(ui.paidBy||st.pending.payer)}
+  else if(a==="split"){return finish(null)}
+  else if(a==="discard"){st.pending=null;ui.started=false;ui.sel=new Set();ui.guests=new Set();ui.gm=false;ui.paidBy=null;save()}
+  else if(a==="sample"){st.sample=!st.sample;if(st.sample&&!st.demo.length)st.demo=makeDemo();save()}
+  else if(a==="theme"){const r=document.documentElement,dark=getComputedStyle(r).colorScheme==="dark";r.dataset.theme=dark?"light":"dark";return}
+  else if(a==="askwipe"){return document.getElementById("dlg").showModal()}
+  else if(a==="closedlg"){return document.getElementById("dlg").close()}
+  else if(a==="wipe"){st={real:[],demo:[],sample:false,pending:null};ui.sel=new Set();ui.guests=new Set();ui.started=false;ui.gm=false;save();document.getElementById("dlg").close()}
+  else return;
+  render();
+}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-act]");if(t)act(t)});
+document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.matches("[role=checkbox],[role=switch]")){e.preventDefault();act(e.target)}});
+render();
+</script>
+</body>
+</html>
